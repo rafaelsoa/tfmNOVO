@@ -14,6 +14,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.Alunos;
+import model.Modalidades;
 
 /**
  *
@@ -44,8 +46,14 @@ public class AlunoView extends JPanel {
         entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("tfm?zeroDateTimeBehavior=convertToNullPU").createEntityManager();
         query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT a FROM Alunos a");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
-        masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        alunosQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT a FROM Alunos a");
+        alunosList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : alunosQuery.getResultList();
+        query1 = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("select m from Modalidades m");
+        list1 = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query1.getResultList());
+        modalidadesQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT m FROM Modalidades m");
+        modalidadesList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : modalidadesQuery.getResultList();
+        jPanel1 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         telefoneLabel = new javax.swing.JLabel();
         matriculaLabel = new javax.swing.JLabel();
@@ -74,67 +82,31 @@ public class AlunoView extends JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         telefoneField = new javax.swing.JFormattedTextField();
-        jPanel1 = new javax.swing.JPanel();
-        refreshButton = new javax.swing.JButton();
-        newButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
-        saveButton3 = new javax.swing.JButton();
+        masterScrollPane = new javax.swing.JScrollPane();
+        masterTable = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<String>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
+        newButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        refreshButton = new javax.swing.JButton();
+        saveButton3 = new javax.swing.JButton();
 
         FormListener formListener = new FormListener();
 
         setBackground(new java.awt.Color(0, 0, 0));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        masterTable.setBackground(new java.awt.Color(255, 102, 0));
-        masterTable.setFont(new java.awt.Font("DialogInput", 0, 12)); // NOI18N
-        masterTable.setForeground(new java.awt.Color(0, 0, 0));
-        masterTable.setGridColor(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${matricula}"));
-        columnBinding.setColumnName("Matricula");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
-        columnBinding.setColumnName("Nome");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dataNascimento}"));
-        columnBinding.setColumnName("Data Nascimento");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${cpf}"));
-        columnBinding.setColumnName("Cpf");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${sexo}"));
-        columnBinding.setColumnName("Sexo");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${telefone}"));
-        columnBinding.setColumnName("Telefone");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${email}"));
-        columnBinding.setColumnName("Email");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${altura}"));
-        columnBinding.setColumnName("Altura");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${peso}"));
-        columnBinding.setColumnName("Peso");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TFMCodigo}"));
-        columnBinding.setColumnName("TFMCodigo");
-        columnBinding.setColumnClass(Integer.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${end}"));
-        columnBinding.setColumnName("End");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${obs}"));
-        columnBinding.setColumnName("Obs");
-        columnBinding.setColumnClass(String.class);
-        bindingGroup.addBinding(jTableBinding);
-
-        masterScrollPane.setViewportView(masterTable);
-
-        add(masterScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 650, 190));
+        jTabbedPane1.setFont(new java.awt.Font("Base 02", 1, 18)); // NOI18N
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -301,6 +273,52 @@ public class AlunoView extends JPanel {
 
         telefoneField.addActionListener(formListener);
 
+        masterTable.setBackground(new java.awt.Color(255, 102, 0));
+        masterTable.setFont(new java.awt.Font("DialogInput", 0, 12)); // NOI18N
+        masterTable.setForeground(new java.awt.Color(0, 0, 0));
+        masterTable.setGridColor(new java.awt.Color(255, 255, 255));
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${matricula}"));
+        columnBinding.setColumnName("Matricula");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
+        columnBinding.setColumnName("Nome");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dataNascimento}"));
+        columnBinding.setColumnName("Data Nascimento");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${cpf}"));
+        columnBinding.setColumnName("Cpf");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${sexo}"));
+        columnBinding.setColumnName("Sexo");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${telefone}"));
+        columnBinding.setColumnName("Telefone");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${email}"));
+        columnBinding.setColumnName("Email");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${altura}"));
+        columnBinding.setColumnName("Altura");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${peso}"));
+        columnBinding.setColumnName("Peso");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TFMCodigo}"));
+        columnBinding.setColumnName("TFMCodigo");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${end}"));
+        columnBinding.setColumnName("End");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${obs}"));
+        columnBinding.setColumnName("Obs");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+
+        masterScrollPane.setViewportView(masterTable);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -308,92 +326,104 @@ public class AlunoView extends JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sexoLabel)
-                            .addComponent(telefoneLabel)
-                            .addComponent(emailLabel))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(alturaLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(alturaField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pesoLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(pesoField, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(pesoLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(imcField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(endLabel)
+                                    .addComponent(obsLabel))
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(telefoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(dataNascimentoLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(dataNascimentoField))
-                                    .addComponent(emailField, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                                        .addGap(78, 78, 78)
+                                        .addComponent(jScrollPane1))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(endField))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sexoLabel)
+                                    .addComponent(telefoneLabel)
+                                    .addComponent(emailLabel))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(imcField, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(22, 22, 22)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(emailField)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(telefoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(dataNascimentoLabel)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(dataNascimentoField)))))))
+                        .addGap(78, 78, 78))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(matriculaLabel)
-                            .addComponent(nomeLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nomeField)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(masterScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(matriculaField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cpfLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(TFMCodigoLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(TFMCodigoField, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(sexoField, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(endLabel)
-                            .addComponent(obsLabel))
-                        .addGap(73, 73, 73)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(endField))))
-                .addContainerGap())
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(matriculaLabel)
+                                    .addComponent(nomeLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(sexoField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(alturaLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(alturaField, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(pesoLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(pesoField, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(pesoLabel1))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(matriculaField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cpfLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(TFMCodigoLabel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(TFMCodigoField, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(nomeField))))
+                        .addGap(84, 84, 84))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(matriculaLabel)
-                    .addComponent(matriculaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cpfLabel)
-                    .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TFMCodigoLabel)
-                    .addComponent(TFMCodigoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(matriculaLabel)
+                        .addComponent(matriculaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cpfLabel)
+                        .addComponent(cpfField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(TFMCodigoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TFMCodigoLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nomeLabel)
                     .addComponent(nomeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sexoLabel)
-                            .addComponent(sexoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(alturaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pesoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pesoLabel1)
-                            .addComponent(imcField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(pesoLabel, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addComponent(alturaLabel, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(sexoLabel)
+                        .addComponent(sexoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(imcField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(alturaLabel)
+                        .addComponent(alturaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(pesoLabel)
+                        .addComponent(pesoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pesoLabel1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(telefoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -413,73 +443,97 @@ public class AlunoView extends JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(obsLabel)
-                        .addContainerGap(46, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)))
         );
 
-        add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 780, 310));
+        jTabbedPane1.addTab("Cadastro do Aluno", jPanel2);
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel2.setFont(new java.awt.Font("Base 02", 1, 18)); // NOI18N
+        jLabel2.setText("Cadastro de Modalidades ");
 
-        refreshButton.setBackground(new java.awt.Color(0, 0, 0));
-        refreshButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
-        refreshButton.setForeground(new java.awt.Color(255, 102, 0));
-        refreshButton.setText("Atualizar");
-        refreshButton.addActionListener(formListener);
+        jButton2.setFont(new java.awt.Font("Base 02", 1, 18)); // NOI18N
+        jButton2.setText("Cadastrar");
+        jButton2.addActionListener(formListener);
 
-        newButton.setBackground(new java.awt.Color(0, 0, 0));
-        newButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
-        newButton.setForeground(new java.awt.Color(255, 102, 0));
-        newButton.setText("Novo");
-        newButton.addActionListener(formListener);
+        jButton3.setFont(new java.awt.Font("Base 02", 1, 18)); // NOI18N
+        jButton3.setText("Remover");
 
-        deleteButton.setBackground(new java.awt.Color(0, 0, 0));
-        deleteButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
-        deleteButton.setForeground(new java.awt.Color(255, 102, 0));
-        deleteButton.setText("Deletar");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list1, jComboBox1);
+        bindingGroup.addBinding(jComboBoxBinding);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${selectedElement.modalidades}");
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, eLProperty, jTable1);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${codigo}"));
+        columnBinding.setColumnName("Código");
+        columnBinding.setColumnClass(Integer.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
+        columnBinding.setColumnName("Nome");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${observacao}"));
+        columnBinding.setColumnName("Observação");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane2.setViewportView(jTable1);
 
-        deleteButton.addActionListener(formListener);
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 69, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addGap(30, 30, 30)
+                                .addComponent(jButton2))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 648, Short.MAX_VALUE))
+                        .addGap(61, 61, 61))))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addGap(31, 31, 31))
+        );
 
-        saveButton3.setBackground(new java.awt.Color(0, 0, 0));
-        saveButton3.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
-        saveButton3.setForeground(new java.awt.Color(255, 102, 0));
-        saveButton3.setText("Salvar");
-        saveButton3.addActionListener(formListener);
+        jTabbedPane1.addTab("Modalidades do Aluno", jPanel3);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(saveButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshButton)
-                    .addComponent(deleteButton)
-                    .addComponent(newButton))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 731, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {deleteButton, newButton, refreshButton});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(newButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(refreshButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveButton3)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 740, 510));
 
         jLabel1.setFont(new java.awt.Font("Base 02", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 153, 0));
@@ -490,14 +544,46 @@ public class AlunoView extends JPanel {
         jButton1.setFont(new java.awt.Font("Base 02", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 102, 0));
         jButton1.setText("MODALIDADES ");
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 620, 240, -1));
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 640, 230, -1));
 
         saveButton.setBackground(new java.awt.Color(0, 0, 0));
         saveButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
         saveButton.setForeground(new java.awt.Color(255, 102, 0));
         saveButton.setText("Salvar");
         saveButton.addActionListener(formListener);
-        add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 620, 133, -1));
+        add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 640, 133, -1));
+
+        newButton.setBackground(new java.awt.Color(0, 0, 0));
+        newButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
+        newButton.setForeground(new java.awt.Color(255, 102, 0));
+        newButton.setText("Novo");
+        newButton.addActionListener(formListener);
+        add(newButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 133, -1));
+
+        deleteButton.setBackground(new java.awt.Color(0, 0, 0));
+        deleteButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
+        deleteButton.setForeground(new java.awt.Color(255, 102, 0));
+        deleteButton.setText("Deletar");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        deleteButton.addActionListener(formListener);
+        add(deleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 133, -1));
+
+        refreshButton.setBackground(new java.awt.Color(0, 0, 0));
+        refreshButton.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
+        refreshButton.setForeground(new java.awt.Color(255, 102, 0));
+        refreshButton.setText("Atualizar");
+        refreshButton.addActionListener(formListener);
+        add(refreshButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 130, -1));
+
+        saveButton3.setBackground(new java.awt.Color(0, 0, 0));
+        saveButton3.setFont(new java.awt.Font("Base 02", 0, 18)); // NOI18N
+        saveButton3.setForeground(new java.awt.Color(255, 102, 0));
+        saveButton3.setText("Salvar");
+        saveButton3.addActionListener(formListener);
+        add(saveButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 133, -1));
 
         bindingGroup.bind();
     }
@@ -516,8 +602,11 @@ public class AlunoView extends JPanel {
             else if (evt.getSource() == telefoneField) {
                 AlunoView.this.telefoneFieldActionPerformed(evt);
             }
-            else if (evt.getSource() == refreshButton) {
-                AlunoView.this.refreshButtonActionPerformed(evt);
+            else if (evt.getSource() == jButton2) {
+                AlunoView.this.jButton2ActionPerformed(evt);
+            }
+            else if (evt.getSource() == saveButton) {
+                AlunoView.this.saveButtonActionPerformed(evt);
             }
             else if (evt.getSource() == newButton) {
                 AlunoView.this.newButtonActionPerformed(evt);
@@ -525,11 +614,11 @@ public class AlunoView extends JPanel {
             else if (evt.getSource() == deleteButton) {
                 AlunoView.this.deleteButtonActionPerformed(evt);
             }
+            else if (evt.getSource() == refreshButton) {
+                AlunoView.this.refreshButtonActionPerformed(evt);
+            }
             else if (evt.getSource() == saveButton3) {
                 AlunoView.this.saveButton3ActionPerformed(evt);
-            }
-            else if (evt.getSource() == saveButton) {
-                AlunoView.this.saveButtonActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
@@ -550,6 +639,8 @@ public class AlunoView extends JPanel {
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+       
+        if (JOptionPane.showConfirmDialog(null, "Deseja excluir o cadastro?", "Pergunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)== JOptionPane.YES_OPTION){
         int[] selected = masterTable.getSelectedRows();
         List<model.Alunos> toRemove = new ArrayList<model.Alunos>(selected.length);
         for (int idx = 0; idx < selected.length; idx++) {
@@ -559,9 +650,12 @@ public class AlunoView extends JPanel {
         }
         list.removeAll(toRemove);
         saveButton.doClick();
+//        refreshButton.doClick();
+        }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+       if (podeInserir){
         model.Alunos a = new model.Alunos();
         entityManager.persist(a);
         list.add(a);
@@ -570,6 +664,7 @@ public class AlunoView extends JPanel {
         masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
         podeInserir = false;
         newButton.setEnabled(podeInserir);
+       }
     }//GEN-LAST:event_newButtonActionPerformed
     
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -634,15 +729,35 @@ public class AlunoView extends JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_telefoneFieldActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+     int rowAluno = masterTable.getSelectedRow();
+        Alunos aluno = list.get(rowAluno);
+        Modalidades modalidade = (Modalidades)jComboBox1.getSelectedItem();
+        aluno.addModalidade(modalidade);
+        modalidade.addAluno(aluno);
+        
+        masterTable.clearSelection();
+        if(masterTable.getRowCount()>0){
+           int ultima = masterTable.getRowCount()-1;
+           masterTable.setRowSelectionInterval(0,0);
+           masterTable.setRowSelectionInterval(ultima, ultima);
+        }
+         masterTable.setRowSelectionInterval(rowAluno, rowAluno);
+         
+         int ultimaLinhaModalidade = aluno.sizeofListModalides()-1;
+         jTable1.setRowSelectionInterval (ultimaLinhaModalidade, ultimaLinhaModalidade);
+         jTable1.scrollRectToVisible (jTable1.getCellRect(ultimaLinhaModalidade, 0, true));
+    }//GEN-LAST:event_jButton2ActionPerformed
+
       public boolean existeCamposVazios() {
         if (nomeField.getText().isEmpty()) {
             return true;
 
         }
-        if (telefoneField.getText().isEmpty()) {
-            return true;
-
-        }
+//        if (telefoneField.getText().isEmpty()) {
+//            return true;
+//
+//        }
         if (endField.getText().isEmpty()) {
             return true;
 
@@ -661,6 +776,8 @@ public class AlunoView extends JPanel {
     private javax.swing.JLabel TFMCodigoLabel;
     private javax.swing.JTextField alturaField;
     private javax.swing.JLabel alturaLabel;
+    private java.util.List<model.Alunos> alunosList;
+    private javax.persistence.Query alunosQuery;
     private javax.swing.JTextField cpfField;
     private javax.swing.JLabel cpfLabel;
     private javax.swing.JTextField dataNascimentoField;
@@ -673,16 +790,27 @@ public class AlunoView extends JPanel {
     private javax.persistence.EntityManager entityManager;
     private javax.swing.JTextField imcField;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private java.util.List<model.Alunos> list;
+    private java.util.List<model.Modalidades> list1;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField matriculaField;
     private javax.swing.JLabel matriculaLabel;
+    private java.util.List<model.Modalidades> modalidadesList;
+    private javax.persistence.Query modalidadesQuery;
     private javax.swing.JButton newButton;
     private javax.swing.JTextField nomeField;
     private javax.swing.JLabel nomeLabel;
@@ -691,6 +819,7 @@ public class AlunoView extends JPanel {
     private javax.swing.JLabel pesoLabel;
     private javax.swing.JLabel pesoLabel1;
     private javax.persistence.Query query;
+    private javax.persistence.Query query1;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JButton saveButton3;

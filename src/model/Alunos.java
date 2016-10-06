@@ -76,7 +76,7 @@ public class Alunos implements Serializable {
     @Column(name = "TFM_Codigo")
     private Integer tFMCodigo;
     
-//    @ManyToMany (mappedBy = "alunos")
+   @ManyToMany (mappedBy = "alunos")
     private List<Modalidades> modalidades;
     
     

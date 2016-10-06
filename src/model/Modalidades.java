@@ -50,7 +50,7 @@ public class Modalidades implements Serializable {
     @Column(name = "Observacao")
     private String observacao;
      
-    @ManyToMany (mappedBy = "modalidades")
+    @ManyToMany 
     private List<Alunos> alunos;
     
     public Modalidades() {
@@ -120,7 +120,8 @@ public class Modalidades implements Serializable {
 
     @Override
     public String toString() {
-        return "view.Modalidades[ codigo=" + codigo + " ]";
+//        return "view.Modalidades[ codigo=" + codigo + " ]";
+     return nome;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -131,24 +132,27 @@ public class Modalidades implements Serializable {
         changeSupport.removePropertyChangeListener(listener);
     }
 
-//    public List<Alunos> getAlunos() {
-//        return alunos;
-//    }
-//     public void addModalidade (Alunos a){
-//        alunos.add(a);
-//    }
-//    public void removeModalidade (Alunos a){
-//       alunos.remove(a);
-//    }
-//    
-//    public Alunos getModalidade (int matricula){
-//        return alunos.get(matricula);
-//    }
-//    
-//    public int sizeofListModalides(){
-//    return alunos.size();
-//    }
+    public List<Alunos> getAluno() {
+        return alunos;
+    }
+     public void addAluno (Alunos a){
+        alunos.add(a);
+    }
+    public void removeAluno (Alunos a){
+       alunos.remove(a);
+    }
     
+    public Alunos getAluno (int matricula){
+        return alunos.get(matricula);
+    }
+    
+    public int sizeofListAluno(){
+    return alunos.size();
+    }
+
+
+    
+   
     
     
     

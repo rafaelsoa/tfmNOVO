@@ -16,10 +16,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
-
 public class ModalidadeView extends JPanel {
-    
+
+    private boolean podeInserir = true;
+
     public ModalidadeView() {
         initComponents();
         if (!Beans.isDesignTime()) {
@@ -156,7 +156,6 @@ public class ModalidadeView extends JPanel {
         nomeField.setBackground(new java.awt.Color(153, 153, 153));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.nome}"), nomeField, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceUnreadableValue("null");
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), nomeField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
@@ -225,7 +224,9 @@ public class ModalidadeView extends JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -289,7 +290,6 @@ public class ModalidadeView extends JPanel {
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    
     @SuppressWarnings("unchecked")
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         entityManager.getTransaction().rollback();
@@ -303,44 +303,65 @@ public class ModalidadeView extends JPanel {
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-       if (JOptionPane.showConfirmDialog(null, "Deseja excluir o cadastro?", "Pergunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)== JOptionPane.YES_OPTION){
-        
-        int[] selected = masterTable.getSelectedRows();
-        List<model.Modalidades> toRemove = new ArrayList<model.Modalidades>(selected.length);
-        for (int idx = 0; idx < selected.length; idx++) {
-            model.Modalidades m = list.get(masterTable.convertRowIndexToModel(selected[idx]));
-            toRemove.add(m);
-            entityManager.remove(m);
+        if (JOptionPane.showConfirmDialog(null, "Deseja excluir o cadastro?", "Pergunta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+
+            int[] selected = masterTable.getSelectedRows();
+            List<model.Modalidades> toRemove = new ArrayList<model.Modalidades>(selected.length);
+            for (int idx = 0; idx < selected.length; idx++) {
+                model.Modalidades m = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+                toRemove.add(m);
+                entityManager.remove(m);
+            }
+            list.removeAll(toRemove);
+            saveButton.doClick();
         }
-        list.removeAll(toRemove);
-        saveButton.doClick();
-       }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        model.Modalidades m = new model.Modalidades();
-        entityManager.persist(m);
-        list.add(m);
-        int row = list.size() - 1;
-        masterTable.setRowSelectionInterval(row, row);
-        masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
-    }//GEN-LAST:event_newButtonActionPerformed
-    
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<model.Modalidades> merged = new ArrayList<model.Modalidades>(list.size());
-            for (model.Modalidades m : list) {
-                merged.add(entityManager.merge(m));
-            }
-            list.clear();
-            list.addAll(merged);
-            refreshButton.doClick();
+        if (podeInserir) {
+            model.Modalidades m = new model.Modalidades();
+            entityManager.persist(m);
+            list.add(m);
+            int row = list.size() - 1;
+            masterTable.setRowSelectionInterval(row, row);
+            masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+            podeInserir = false;
+            newButton.setEnabled(podeInserir);
         }
+    }//GEN-LAST:event_newButtonActionPerformed
+
+//    public boolean existeCamposVazios() {
+//        if (nomeField.getText().isEmpty()) {
+//            return true;
+//
+//        }
+//
+//        return false;
+
+//    }
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+//        if (existeCamposVazios()) {
+            try {
+                entityManager.getTransaction().commit();
+                entityManager.getTransaction().begin();
+            } catch (RollbackException rex) {
+                rex.printStackTrace();
+                entityManager.getTransaction().begin();
+                List<model.Modalidades> merged = new ArrayList<model.Modalidades>(list.size());
+                for (model.Modalidades m : list) {
+                    merged.add(entityManager.merge(m));
+                }
+                list.clear();
+                list.addAll(merged);
+               
+            }
+            podeInserir = true;
+            newButton.setEnabled(podeInserir);
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios", "Erro", JOptionPane.ERROR_MESSAGE);
+//        }
+            refreshButton.doClick();   
     }//GEN-LAST:event_saveButtonActionPerformed
 
 
@@ -403,5 +424,5 @@ public class ModalidadeView extends JPanel {
             }
         });
     }
-    
+
 }
